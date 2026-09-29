@@ -1,12 +1,20 @@
 # NDVI Geoportal, Islamabad + Rawalpindi
 
-An interactive dashboard that combines a **4-band Sentinel-2 image** (R, G, B, NIR), a cloud-masked **NDVI raster**, a **Copernicus DEM** with hillshade and contours, and **~2 million stratified-random sample points**, all clipped to the dissolved boundary of Islamabad Capital Territory and Rawalpindi (about 6,853 km²). Click anywhere on the map to identify the nearest point, its NDVI, RGB/NIR reflectance and elevation in a single API call.
+An interactive dashboard that combines a **4-band Sentinel-2 image** (R, G, B, NIR), a cloud-masked **NDVI raster**, a **Copernicus DEM** with hillshade and contours, and **~2 million stratified-random sample points**, all published live on GeoServer and rendered in a React + OpenLayers + GSAP single-page app.
 
 **Stack:** React 18 + OpenLayers 10 + GSAP · Node.js 20 / Express · GeoServer 2.25 · PostgreSQL 16 + PostGIS 3.4 · Python 3.11 pipeline · Docker Compose
 
 Full technical write-up: [`docs/DOCUMENTATION.md`](docs/DOCUMENTATION.md) (also as [`docs/DOCUMENTATION.pdf`](docs/DOCUMENTATION.pdf)).
 
 ---
+
+## Dashboard screenshots
+
+![Dashboard overview showing NDVI layer with sample points and inspection panel](docs/screenshots/dashboard-1.png)
+
+![Full geoportal view with layer toggles, elevation analysis, and NDVI distribution charts](docs/screenshots/dashboard-2.png)
+
+![Terrain visualization with DEM hillshade, contours, and live inspection log](docs/screenshots/dashboard-3.png)
 
 ---
 
@@ -97,7 +105,7 @@ Drop any `.geojson`, `.gpkg`, or `.shp` file into `data/aoi/` before running the
 
 ### Optional: Mapbox basemaps
 
-Paste a Mapbox public token into `.env` on the `VITE_MAPBOX_TOKEN=` line, then `docker compose up -d --build web`. Dark, Imagery and Light will use Mapbox tiles instead of Carto/EOX. Free tier is 50k tile loads/month. Details in `.env.example`.
+Paste a Mapbox public token into `.env` on the `VITE_MAPBOX_TOKEN=` line, then `docker compose up -d --build web`. Dark, Imagery and Light will use Mapbox tiles instead of Carto/EOX. Free tier is generous.
 
 ---
 
@@ -123,7 +131,7 @@ Copy the printed `https://*.trycloudflare.com` URL and share it. To stop, press 
 - **Adaptive compression** on RGB (DEFLATE → LZW → NONE) to guarantee the 200 MB size floor without hand-tuning: same section.
 - **Idempotent schema**: the loader runs `prep/schema.sql` every time so upgrades apply in place; see [§ 3.6](docs/DOCUMENTATION.md#36-step-6-put-everything-into-the-database-load_postgispy).
 - **Whitelisted WMS proxy** in the Node API so the browser never talks to GeoServer directly: [§ 5.2](docs/DOCUMENTATION.md#52-why-this-is-safe).
-- **Hand-built SVG charts + GSAP entrances** so the dashboard uses no chart library and animations respect `prefers-reduced-motion`: [§ 7.1](docs/DOCUMENTATION.md#71-what-went-wrong-in-the-first-version-and-how-it-was-fixed).
+- **Hand-built SVG charts + GSAP entrances** so the dashboard uses no chart library and animations respect `prefers-reduced-motion`: [§ 7.1](docs/DOCUMENTATION.md#71-what-went-wrong-in-the-first-attempt).
 
 ---
 
