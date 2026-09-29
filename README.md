@@ -8,14 +8,6 @@ Full technical write-up: [`docs/DOCUMENTATION.md`](docs/DOCUMENTATION.md) (also 
 
 ---
 
-## Demo
-
-![Dashboard](docs/screenshots/dashboard.png)
-![Inspection](docs/screenshots/identify.png)
-![GeoServer](docs/screenshots/geoserver.png)
-
-[Demo video](DEMO_VIDEO_LINK)
-
 ---
 
 ## Verified results (real numbers from this build)
