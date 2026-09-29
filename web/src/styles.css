@@ -1,0 +1,446 @@
+/* ------------------------------------------------------------------ */
+/* Design tokens: near-black premium dashboard palette                */
+/* ------------------------------------------------------------------ */
+:root {
+  --bg: #0a0a0b;
+  --card: #141416;
+  --card-2: #1b1b1e;
+  --card-3: #232327;
+  --border: #26262b;
+  --border-2: #2e2e34;
+  --text: #ececec;
+  --muted: #8b8b92;
+  --muted-2: #6d6d75;
+
+  --lime: #d6f58a;
+  --pale-blue: #a8d4e0;
+  --coral: #f26b4b;
+  --sand: #e8d8b5;
+
+  --radius: 28px;
+  --radius-sm: 14px;
+  --radius-pill: 999px;
+
+  --inset-hi: inset 0 1px 0 rgba(255,255,255,.04);
+  --shadow-md: 0 10px 30px rgba(0,0,0,.35);
+  --shadow-sm: 0 4px 12px rgba(0,0,0,.25);
+
+  font-family: 'Manrope', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  font-feature-settings: 'tnum', 'ss01';
+}
+
+/* Reset + base */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); }
+body { min-height: 100vh; }
+h1, h2, h3, h4 { margin: 0; font-weight: 600; letter-spacing: -0.01em; }
+a { color: var(--pale-blue); text-decoration: none; }
+button { font-family: inherit; }
+::selection { background: var(--lime); color: #111; }
+
+/* Tabular numbers everywhere */
+.num, .kpi-value, .stat-value, .pct, .attr td:last-child { font-variant-numeric: tabular-nums; }
+
+/* Small caps label */
+.label {
+  font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--muted); font-weight: 500;
+}
+
+.muted { color: var(--muted); }
+.hidden { display: none !important; }
+
+/* ------------------------------------------------------------------ */
+/* App shell                                                          */
+/* ------------------------------------------------------------------ */
+.app {
+  min-height: 100vh;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 20px 24px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Top bar with pill nav                                              */
+/* ------------------------------------------------------------------ */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 12px 12px 12px 20px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--inset-hi), var(--shadow-sm);
+}
+.brand {
+  display: flex; align-items: center; gap: 12px;
+  font-weight: 600; font-size: 15px; letter-spacing: 0.01em;
+}
+.brand-mark {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, var(--lime), #6b8a1f 70%);
+  box-shadow: 0 0 0 3px rgba(214,245,138,0.08);
+}
+.brand small { color: var(--muted); font-weight: 400; font-size: 12px; margin-left: 4px; }
+.nav {
+  position: relative;
+  display: flex; align-items: center; gap: 4px;
+  padding: 4px;
+  background: var(--card-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+}
+.nav-pill {
+  position: absolute; top: 4px; left: 0; height: calc(100% - 8px);
+  background: var(--card-3); border-radius: var(--radius-pill);
+  transition: transform 0.35s cubic-bezier(.2,.9,.3,1), width 0.35s cubic-bezier(.2,.9,.3,1);
+  will-change: transform, width;
+  z-index: 0;
+}
+.nav a {
+  position: relative; z-index: 1;
+  padding: 8px 16px; font-size: 13px; color: var(--muted);
+  border-radius: var(--radius-pill); cursor: pointer;
+  transition: color 0.2s;
+}
+.nav a.active { color: var(--text); }
+.nav a:hover { color: var(--text); }
+
+.top-actions { display: flex; gap: 8px; }
+.btn {
+  padding: 8px 16px; border-radius: var(--radius-pill);
+  border: 1px solid var(--border-2); background: transparent; color: var(--text);
+  font-size: 13px; cursor: pointer;
+}
+.btn:hover { border-color: var(--pale-blue); }
+.btn-primary {
+  background: var(--pale-blue); color: #0a2028; border-color: transparent;
+  font-weight: 600;
+}
+.btn-primary:hover { background: #b7dee9; }
+.btn-ghost { color: var(--muted); }
+.btn-ghost:hover { color: var(--text); }
+
+/* ------------------------------------------------------------------ */
+/* Cards                                                              */
+/* ------------------------------------------------------------------ */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--inset-hi), var(--shadow-sm);
+  padding: 24px;
+}
+.card h3 { font-size: 15px; }
+.card-h {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  margin-bottom: 18px;
+}
+.card-h .card-title { display: flex; align-items: center; gap: 12px; }
+.card-sub { color: var(--muted); font-size: 12px; }
+
+/* ------------------------------------------------------------------ */
+/* Header card                                                        */
+/* ------------------------------------------------------------------ */
+.header-card {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr auto;
+  gap: 24px;
+  align-items: center;
+}
+.header-title h2 { font-size: 24px; margin-bottom: 6px; }
+.header-title .label { font-size: 11px; }
+.stat { display: flex; flex-direction: column; gap: 4px; }
+.stat-value { font-size: 20px; font-weight: 600; }
+.stack-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip {
+  padding: 5px 12px; font-size: 11px; letter-spacing: 0.06em;
+  border: 1px solid var(--border-2); border-radius: var(--radius-pill);
+  color: var(--muted); text-transform: uppercase;
+}
+.chip.solid { background: var(--card-2); color: var(--text); }
+
+/* ------------------------------------------------------------------ */
+/* Dashboard grid                                                     */
+/* ------------------------------------------------------------------ */
+.dashboard {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+  gap: 20px;
+  align-items: start;
+}
+.col { display: flex; flex-direction: column; gap: 20px; }
+
+/* ------------------------------------------------------------------ */
+/* Chart: ridgeline (hero)                                            */
+/* ------------------------------------------------------------------ */
+.ridgeline { position: relative; }
+.ridgeline svg { display: block; width: 100%; height: auto; }
+.ridgeline .ridge-min-max {
+  display: flex; justify-content: space-between; margin-top: 12px;
+  font-size: 12px; color: var(--muted);
+}
+
+/* ------------------------------------------------------------------ */
+/* Chart: NDVI histogram                                              */
+/* ------------------------------------------------------------------ */
+.hist svg { display: block; width: 100%; height: auto; }
+.hist-total {
+  display: flex; align-items: baseline; gap: 8px;
+}
+.hist-total .num { font-size: 26px; font-weight: 600; }
+.hist-total .label { font-size: 10px; }
+.axis-tick { font-size: 10px; fill: var(--muted); }
+
+/* ------------------------------------------------------------------ */
+/* Chart: range (NDVI by elevation)                                   */
+/* ------------------------------------------------------------------ */
+/* NDVI-by-elevation chart:
+   - capsule is the p10..p90 range; use pale-blue at low opacity so it reads
+     as a coloured range, not an inactive background track.
+   - mean dot uses the lime accent so it stands out against the capsule.
+   - labels sit in a fixed left column; tabular numerals keep the numbers
+     visually aligned across rows. */
+.range-chart svg { display: block; width: 100%; height: auto; }
+.range-row-label {
+  font-size: 10px; fill: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.range-capsule { fill: var(--pale-blue); fill-opacity: 0.35; }
+.range-mean { fill: var(--lime); stroke: #0a0a0b; stroke-width: 1; }
+
+/* ------------------------------------------------------------------ */
+/* Chart: class share                                                 */
+/* ------------------------------------------------------------------ */
+.class-share { display: flex; flex-direction: column; gap: 12px; }
+.class-row { display: grid; grid-template-columns: 110px 1fr 46px; gap: 12px; align-items: center; font-size: 13px; }
+.class-row .swatch {
+  width: 12px; height: 12px; border-radius: 4px; display: inline-block;
+  margin-right: 8px; vertical-align: -1px;
+}
+.class-bar-outer {
+  height: 10px; background: var(--card-3); border-radius: var(--radius-pill); overflow: hidden;
+}
+.class-bar-inner {
+  height: 100%; border-radius: var(--radius-pill);
+  transform-origin: left; transform: scaleX(0);
+}
+.class-row .pct { text-align: right; color: var(--muted); font-size: 12px; }
+
+/* ------------------------------------------------------------------ */
+/* Map card                                                           */
+/* ------------------------------------------------------------------ */
+.map-card { padding: 20px; position: relative; }
+.map-card .card-h { margin-bottom: 14px; }
+.segmented {
+  display: inline-flex; padding: 3px; gap: 2px;
+  background: var(--card-2); border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+}
+.segmented button {
+  padding: 6px 12px; font-size: 12px; color: var(--muted);
+  background: transparent; border: none; border-radius: var(--radius-pill); cursor: pointer;
+}
+.segmented button.active { background: var(--card-3); color: var(--text); }
+.segmented button:hover { color: var(--text); }
+.map-actions { display: flex; gap: 6px; }
+.icon-btn {
+  width: 32px; height: 32px; padding: 0; border-radius: 999px;
+  background: var(--card-2); border: 1px solid var(--border);
+  color: var(--muted); cursor: pointer;
+}
+.icon-btn:hover { color: var(--text); border-color: var(--border-2); }
+
+.map-wrap {
+  position: relative;
+  height: 560px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: #0e0e10;
+  border: 1px solid var(--border);
+}
+.map { position: absolute; inset: 0; }
+.mouse-position {
+  position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); z-index: 5;
+  background: rgba(20,20,22,.85); backdrop-filter: blur(8px);
+  padding: 6px 12px; border-radius: var(--radius-pill);
+  font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums;
+  border: 1px solid var(--border);
+}
+.legend-chip {
+  position: absolute; bottom: 12px; right: 12px; z-index: 5;
+  background: rgba(20,20,22,.85); backdrop-filter: blur(8px);
+  padding: 10px 12px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); font-size: 11px; color: var(--muted);
+  max-width: 200px;
+}
+.legend-chip .legend-bar { height: 8px; border-radius: 4px; margin: 6px 0; }
+.legend-chip .legend-labels { display: flex; justify-content: space-between; font-size: 10px; }
+
+/* ------------------------------------------------------------------ */
+/* Floating glass layer panel (over the map)                          */
+/* ------------------------------------------------------------------ */
+.layer-panel {
+  position: absolute; top: 12px; left: 12px; z-index: 6;
+  width: 280px; max-height: calc(100% - 24px); overflow-y: auto;
+  background: rgba(20,20,22,.75); backdrop-filter: blur(16px);
+  border: 1px solid var(--border-2); border-radius: var(--radius-sm);
+  padding: 14px; box-shadow: var(--shadow-md);
+}
+.layer-panel h4 { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.layer-row { padding: 8px 0; border-top: 1px solid rgba(255,255,255,.05); }
+.layer-row:first-of-type { border-top: none; padding-top: 0; }
+.layer-row.off { opacity: 0.55; }
+.layer-row .layer-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  cursor: pointer; user-select: none;
+}
+.layer-row .layer-head strong { font-size: 13px; font-weight: 500; }
+.layer-row .layer-head small { color: var(--muted); font-size: 11px; display: block; }
+
+/* Custom toggle switch (checkbox styled as a pill) */
+.switch {
+  position: relative; display: inline-block; width: 34px; height: 20px; flex-shrink: 0;
+}
+.switch input { opacity: 0; width: 0; height: 0; }
+.switch .track {
+  position: absolute; inset: 0; background: var(--card-3); border-radius: 999px;
+  border: 1px solid var(--border-2); transition: background 0.25s;
+}
+.switch .knob {
+  position: absolute; top: 2px; left: 2px; width: 14px; height: 14px;
+  background: var(--muted); border-radius: 50%; transition: transform 0.25s, background 0.25s;
+}
+.switch input:checked ~ .track { background: rgba(168,212,224,0.25); border-color: var(--pale-blue); }
+.switch input:checked ~ .knob { transform: translateX(14px); background: var(--pale-blue); }
+
+.opacity-slider { width: 100%; margin: 8px 0 0; accent-color: var(--pale-blue); }
+.opacity-label { font-size: 10px; color: var(--muted); margin-top: 4px; display: flex; justify-content: space-between; }
+
+.rgb-mode {
+  display: inline-flex; padding: 2px; gap: 2px; margin-top: 6px;
+  background: rgba(255,255,255,0.04); border-radius: var(--radius-pill);
+}
+.rgb-mode button {
+  padding: 3px 10px; font-size: 10px; color: var(--muted);
+  background: transparent; border: none; border-radius: var(--radius-pill); cursor: pointer;
+}
+.rgb-mode button.active { background: var(--card-3); color: var(--text); }
+
+/* ------------------------------------------------------------------ */
+/* Inspection log                                                     */
+/* ------------------------------------------------------------------ */
+.log-card { display: flex; flex-direction: column; gap: 16px; }
+.log-empty {
+  padding: 32px; text-align: center; color: var(--muted); font-size: 13px;
+  border: 1px dashed var(--border-2); border-radius: var(--radius-sm);
+}
+.log-list {
+  display: flex; flex-direction: column; gap: 12px;
+  max-height: 480px; overflow-y: auto; padding-right: 4px;
+}
+.log-entry {
+  border-left: 2px solid var(--border-2); padding-left: 14px; position: relative;
+}
+.log-entry::before {
+  content: ''; position: absolute; left: -5px; top: 4px;
+  width: 8px; height: 8px; border-radius: 50%; background: var(--pale-blue);
+}
+.log-entry-head {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 12px; color: var(--muted); margin-bottom: 6px;
+}
+.log-body {
+  background: var(--card-2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px;
+  font-size: 12px;
+}
+.log-row {
+  display: grid; grid-template-columns: 90px 1fr; gap: 6px; padding: 3px 0;
+  align-items: center;
+}
+.log-row .label { font-size: 10px; }
+.log-row .value { color: var(--text); font-weight: 500; }
+.swatch {
+  display: inline-block; width: 12px; height: 12px; border-radius: 3px;
+  border: 1px solid rgba(255,255,255,.15); margin-right: 6px; vertical-align: -1px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Skeleton loading shimmer                                           */
+/* ------------------------------------------------------------------ */
+.skeleton {
+  background: linear-gradient(90deg, var(--card-2) 0%, var(--card-3) 50%, var(--card-2) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+  border-radius: 8px;
+}
+@keyframes shimmer {
+  0% { background-position: -100% 0; }
+  100% { background-position: 100% 0; }
+}
+.skel-line { height: 12px; margin: 8px 0; }
+.skel-block { height: 120px; margin: 12px 0; }
+
+/* ------------------------------------------------------------------ */
+/* Error state                                                        */
+/* ------------------------------------------------------------------ */
+.error-card {
+  background: rgba(242,107,75,0.08); border: 1px solid rgba(242,107,75,0.3);
+  border-radius: var(--radius-sm); padding: 12px 16px; font-size: 13px; color: #f7a48c;
+}
+
+/* ------------------------------------------------------------------ */
+/* Responsive: stack under 900px                                      */
+/* ------------------------------------------------------------------ */
+@media (max-width: 900px) {
+  .header-card { grid-template-columns: 1fr; gap: 14px; }
+  .dashboard { grid-template-columns: 1fr; }
+  .map-wrap { height: 420px; }
+  .nav { display: none; }
+  .layer-panel { width: 240px; }
+}
+
+@media (max-width: 600px) {
+  .app { padding: 12px 12px 24px; }
+  .card { padding: 16px; border-radius: 20px; }
+  .header-card { padding: 20px; }
+  .topbar { border-radius: 20px; padding: 10px 12px; }
+  .layer-panel { width: 200px; padding: 10px; }
+}
+
+/* ------------------------------------------------------------------ */
+/* Reduced motion                                                     */
+/* ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* OpenLayers dark overrides                                          */
+/* ------------------------------------------------------------------ */
+.ol-control button {
+  background: rgba(20,20,22,.85) !important; color: var(--text) !important;
+  border-radius: 6px !important;
+}
+.ol-control button:hover, .ol-control button:focus {
+  background: var(--card-3) !important;
+}
+.ol-zoom { top: auto !important; bottom: 60px !important; left: 12px !important; }
+.ol-scale-line {
+  background: rgba(20,20,22,.85) !important; border-radius: 4px !important;
+  padding: 2px 6px !important; font-size: 10px !important;
+}
+.ol-scale-line-inner { color: var(--text) !important; border-color: var(--muted) !important; }
+.ol-attribution { background: rgba(20,20,22,.85) !important; }
+.ol-attribution a, .ol-attribution ul { color: var(--muted) !important; }

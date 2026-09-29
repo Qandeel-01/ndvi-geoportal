@@ -1,0 +1,117 @@
+# -----------------------------------------------------------------------------
+# NDVI Geoportal: full stack
+#
+#   postgis   : PostgreSQL 16 + PostGIS 3.4, stores the 1.9M sample points
+#   geoserver : publishes RGB + NDVI rasters (COG) and the points layer (WMS)
+#   api       : Node.js/Express, identify + stats endpoints, GeoServer proxy
+#   web       : React + OpenLayers build served by Nginx
+#   prep      : one-off Python pipeline (download -> process -> load -> publish)
+#
+# Usage (see README.md):
+#   docker compose up -d postgis geoserver
+#   docker compose run --rm prep python run_all.py
+#   docker compose up -d --build api web
+# -----------------------------------------------------------------------------
+name: ndvi-geoportal
+
+services:
+  postgis:
+    image: postgis/postgis:16-3.4
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # SQL files here run once, on first start (creates the points table).
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "${POSTGRES_HOST_PORT:-5433}:5432"   # 5433 on the host avoids clashing with a local Postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  geoserver:
+    image: docker.osgeo.org/geoserver:2.25.2
+    restart: unless-stopped
+    environment:
+      SKIP_DEMO_DATA: "true"
+      GEOSERVER_ADMIN_USER: ${GEOSERVER_ADMIN_USER}
+      GEOSERVER_ADMIN_PASSWORD: ${GEOSERVER_ADMIN_PASSWORD}
+      # 1.9M points + 300 MB rasters: give the JVM some headroom.
+      EXTRA_JAVA_OPTS: "-Xms1g -Xmx2g"
+    volumes:
+      - geoserver_data:/opt/geoserver_data
+      # Rasters produced by the prep pipeline, mounted read-only.
+      - ./data/rasters:/data/rasters:ro
+    ports:
+      # Exposed only so reviewers can open the admin UI. The web app never
+      # talks to GeoServer directly: all map requests go through the Node proxy.
+      - "${GEOSERVER_HOST_PORT:-8080}:8080"
+    depends_on:
+      postgis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs http://localhost:8080/geoserver/web/ > /dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+  api:
+    build: ./api
+    restart: unless-stopped
+    environment:
+      PORT: 4000
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgis:5432/${POSTGRES_DB}
+      GEOSERVER_URL: http://geoserver:8080/geoserver
+      GEOSERVER_WORKSPACE: ${GEOSERVER_WORKSPACE}
+      CORS_ORIGIN: ${CORS_ORIGIN}
+    ports:
+      - "${API_HOST_PORT:-4000}:4000"
+    depends_on:
+      postgis:
+        condition: service_healthy
+      geoserver:
+        condition: service_started
+
+  web:
+    build:
+      context: ./web
+      # Vite bakes VITE_* env vars into the built JS at build time, so we
+      # forward the values from .env into the build stage here.
+      args:
+        VITE_MAPBOX_TOKEN: ${VITE_MAPBOX_TOKEN:-}
+        VITE_MAPBOX_STYLE: ${VITE_MAPBOX_STYLE:-}
+        VITE_MAPBOX_STYLE_DARK: ${VITE_MAPBOX_STYLE_DARK:-}
+        VITE_MAPBOX_STYLE_LIGHT: ${VITE_MAPBOX_STYLE_LIGHT:-}
+    restart: unless-stopped
+    ports:
+      - "${WEB_HOST_PORT:-3000}:80"
+    depends_on:
+      - api
+
+  # One-off data pipeline. Not started by `docker compose up` (profile "tools").
+  prep:
+    build: ./prep
+    profiles: ["tools"]
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgis:5432/${POSTGRES_DB}
+      GEOSERVER_URL: http://geoserver:8080/geoserver
+      GEOSERVER_ADMIN_USER: ${GEOSERVER_ADMIN_USER}
+      GEOSERVER_ADMIN_PASSWORD: ${GEOSERVER_ADMIN_PASSWORD}
+      GEOSERVER_WORKSPACE: ${GEOSERVER_WORKSPACE}
+      # Path of the rasters as GeoServer sees them (inside its container).
+      GEOSERVER_RASTER_DIR: /data/rasters
+      DATA_DIR: /data
+    volumes:
+      - ./data:/data
+    depends_on:
+      postgis:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+  geoserver_data:

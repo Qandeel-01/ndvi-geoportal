@@ -1,0 +1,45 @@
+# --- Secrets: never commit any real environment file. ---
+# Only .env.example is safe to push. The docker compose stack reads .env
+# from the repo root; the api and web workspaces may also have local .env
+# files for `npm run dev`.
+.env
+.env.local
+*.env
+!.env.example
+!*.env.example
+api/.env
+web/.env
+
+# --- Generated data (large files, rebuilt by the pipeline). ---
+data/raw/
+data/rasters/
+data/vectors/
+data/aoi/
+!data/raw/.gitkeep
+!data/rasters/.gitkeep
+!data/vectors/.gitkeep
+!data/aoi/.gitkeep
+data/*.json
+data/*.log
+
+# --- Raw raster / vector artefacts anywhere in the tree. ---
+*.tif
+*.tiff
+*.npz
+*.part
+
+# --- Language / tooling caches. ---
+node_modules/
+dist/
+build/
+.vite/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# --- Editor / OS ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
