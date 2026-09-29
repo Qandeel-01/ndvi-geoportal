@@ -1,6 +1,6 @@
 # NDVI Geoportal, Islamabad + Rawalpindi
 
-An interactive dashboard that combines a **4-band Sentinel-2 image** (R, G, B, NIR), a cloud-masked **NDVI raster**, a **Copernicus DEM** with hillshade and contours, and **~1.9 million stratified-random sample points**, all clipped to the dissolved boundary of Islamabad Capital Territory and Rawalpindi (about 6,853 km²). Click anywhere on the map to identify the nearest point, its NDVI, RGB/NIR reflectance and elevation in a single API call.
+An interactive dashboard that combines a **4-band Sentinel-2 image** (R, G, B, NIR), a cloud-masked **NDVI raster**, a **Copernicus DEM** with hillshade and contours, and **~2 million stratified-random sample points**, all clipped to the dissolved boundary of Islamabad Capital Territory and Rawalpindi (about 6,853 km²). Click anywhere on the map to identify the nearest point, its NDVI, RGB/NIR reflectance and elevation in a single API call.
 
 **Stack:** React 18 + OpenLayers 10 + GSAP · Node.js 20 / Express · GeoServer 2.25 · PostgreSQL 16 + PostGIS 3.4 · Python 3.11 pipeline · Docker Compose
 
