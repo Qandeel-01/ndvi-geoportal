@@ -16,6 +16,10 @@ Full technical write-up: [`docs/DOCUMENTATION.md`](docs/DOCUMENTATION.md) (also 
 
 ![Terrain visualization with DEM hillshade, contours, and live inspection log](docs/screenshots/dashboard-3.png)
 
+Full walk-through (72 seconds): [docs/media/demo.mp4](docs/media/demo.mp4)
+
+<video src="docs/media/demo.mp4" controls width="760"></video>
+
 ---
 
 ## Verified results (real numbers from this build)

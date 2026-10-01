@@ -152,9 +152,17 @@ export function createDataLayers(meta, initialState) {
   return layers;
 }
 
-/** Update a WMS layer's STYLES param (used for RGB true/false colour toggle). */
+/**
+ * Update a WMS layer's STYLES param (used for the RGB true/false colour
+ * toggle). We call refresh() after updateParams because some OpenLayers
+ * tile-source implementations keep the already-cached tiles until the
+ * zoom level or source changes; refresh() forces the TileWMS to drop its
+ * tile cache and re-request every visible tile with the new STYLES value.
+ */
 export function setLayerStyle(layer, style) {
-  layer.getSource().updateParams({ STYLES: style ?? '' });
+  const source = layer.getSource();
+  source.updateParams({ STYLES: style ?? '' });
+  source.refresh();
 }
 
 // ---------------------------------------------------------------------------
